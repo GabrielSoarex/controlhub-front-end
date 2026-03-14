@@ -1,3 +1,4 @@
+import { useRuntimeConfig } from 'nuxt/app'
 import type { Proposal } from '~/types/proposal'
 
 export interface ListProposalsParams {

@@ -37,10 +37,10 @@
 </template>
 
 <script setup lang="ts">
-import type { Proposal, ProposalStatus } from '~/types/proposal'
-import { fetchProposals } from '~/modules/proposals/services/proposalsService'
-import { useHead } from 'nuxt/app'
-import { onMounted, ref, watch } from 'vue'
+import type { Proposal, ProposalStatus } from "../../types/proposal";
+import { fetchProposals } from "../../modules/proposals/services/proposalsService";
+import { navigateTo, useHead } from "nuxt/app";
+import { onMounted, ref, watch } from "vue";
 
 const proposals = ref<Proposal[]>([]);
 const loading = ref(false);
@@ -56,7 +56,6 @@ async function loadProposals() {
   error.value = false;
   errorMessage.value = "Não foi possível carregar. Tente novamente.";
   try {
-    
     const res = await fetchProposals({
       status: filterStatus.value || undefined,
       q: filterSearch.value || undefined,
@@ -72,7 +71,7 @@ async function loadProposals() {
 }
 
 function onCardClick(proposal: Proposal) {
-  navigateTo(`/proposals/${proposal.id}`)
+  navigateTo(`/proposals/${proposal.id}`);
 }
 
 onMounted(() => {

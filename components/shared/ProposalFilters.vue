@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ProposalStatus } from '~/types/proposal'
+import type { ProposalStatus } from '../../types/proposal'
 
 withDefaults(
   defineProps<{

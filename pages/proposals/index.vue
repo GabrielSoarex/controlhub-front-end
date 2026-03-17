@@ -1,8 +1,6 @@
 <template>
   <div class="pa-4">
-    <h1 class="text-h4 mb-4">
-      Propostas
-    </h1>
+    <h1 class="text-h4 mb-4">Propostas</h1>
 
     <SharedProposalFilters
       v-model:status="filterStatus"
@@ -10,10 +8,7 @@
       class="mb-6"
     />
 
-    <UiLoadingState
-      v-if="loading"
-      message="Carregando..."
-    />
+    <UiLoadingState v-if="loading" message="Carregando..." />
     <UiErrorState
       v-else-if="error"
       title="Algo deu errado"
@@ -35,56 +30,55 @@
         md="4"
         class="mb-4"
       >
-        <SharedProposalCard
-          :proposal="p"
-          @click="onCardClick(p)"
-        />
+        <SharedProposalCard :proposal="p" @click="onCardClick(p)" />
       </v-col>
     </v-row>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Proposal, ProposalStatus } from '~/types/proposal'
-import { fetchProposals } from '~/modules/proposals/services/proposalsService'
+import type { Proposal, ProposalStatus } from "../../types/proposal";
+import { fetchProposals } from "../../modules/proposals/services/proposalsService";
+import { navigateTo, useHead } from "nuxt/app";
+import { onMounted, ref, watch } from "vue";
 
-const proposals = ref<Proposal[]>([])
-const loading = ref(false)
-const error = ref(false)
-const errorMessage = ref('Não foi possível carregar. Tente novamente.')
-const filterStatus = ref<ProposalStatus | ''>('')
-const filterSearch = ref('')
+const proposals = ref<Proposal[]>([]);
+const loading = ref(false);
+const error = ref(false);
+const errorMessage = ref("Não foi possível carregar. Tente novamente.");
+const filterStatus = ref<ProposalStatus | "">("");
+const filterSearch = ref("");
 
-useHead({ title: 'Propostas' })
+useHead({ title: "Propostas" });
 
-async function loadProposals () {
-  loading.value = true
-  error.value = false
-  errorMessage.value = 'Não foi possível carregar. Tente novamente.'
+async function loadProposals() {
+  loading.value = true;
+  error.value = false;
+  errorMessage.value = "Não foi possível carregar. Tente novamente.";
   try {
     const res = await fetchProposals({
       status: filterStatus.value || undefined,
-      q: filterSearch.value || undefined
-    })
-    proposals.value = res
+      q: filterSearch.value || undefined,
+    });
+    proposals.value = res;
   } catch (e: any) {
-    error.value = true
-    const msg = e?.data?.message || e?.message
-    if (msg) errorMessage.value = String(msg)
+    error.value = true;
+    const msg = e?.data?.message || e?.message;
+    if (msg) errorMessage.value = String(msg);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 
-function onCardClick (_proposal: Proposal) {
-  // Navegação para detalhe será implementada na task-005
+function onCardClick(proposal: Proposal) {
+  navigateTo(`/proposals/${proposal.id}`);
 }
 
 onMounted(() => {
-  loadProposals()
-})
+  loadProposals();
+});
 
 watch([filterStatus, filterSearch], () => {
-  loadProposals()
-})
+  loadProposals();
+});
 </script>

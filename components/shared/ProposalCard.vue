@@ -35,7 +35,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Proposal, ProposalStatus } from '~/types/proposal'
+import { computed } from 'vue';
+import type { Proposal, ProposalStatus } from '../../types/proposal'
 
 defineOptions({
   inheritAttrs: false

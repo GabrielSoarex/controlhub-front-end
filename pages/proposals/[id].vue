@@ -18,7 +18,10 @@
       action-label="Voltar à listagem"
       @action="goToList"
     />
-    <div v-else>
+    <div
+      v-else
+      class="detail-content"
+    >
       <v-btn
         variant="text"
         color="primary"
@@ -28,34 +31,34 @@
         <v-icon start icon="mdi-arrow-left" />
         Voltar
       </v-btn>
-      <v-card class="pa-4">
-        <v-card-title class="text-h5 text-wrap">
-          {{ proposal.title }}
-        </v-card-title>
-        <v-card-subtitle class="d-flex align-center gap-2 flex-wrap mt-2">
-          <v-chip
-            :color="statusColor"
-            size="small"
-            variant="tonal"
-          >
-            {{ statusLabel }}
-          </v-chip>
-          <span class="text-caption text-medium-emphasis">{{ formattedDate }}</span>
-        </v-card-subtitle>
-        <v-card-text class="mt-4">
-          <p class="text-body1 text-medium-emphasis">
+      <SharedProposalCard :proposal="proposal">
+        <template #description>
+          <div class="detail-metadata">
+            <v-chip
+              :color="statusColor"
+              size="small"
+              variant="tonal"
+            >
+              {{ statusLabel }}
+            </v-chip>
+            <span class="text-caption text-medium-emphasis">{{ formattedDate }}</span>
+          </div>
+          <p class="text-body1 text-medium-emphasis mb-0">
             {{ proposal.description }}
           </p>
-        </v-card-text>
-      </v-card>
+        </template>
+      </SharedProposalCard>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Proposal, ProposalStatus } from '~/types/proposal'
-import { fetchProposalById } from '~/modules/proposals/services/proposalsService'
+import type { Proposal, ProposalStatus } from '../../types/proposal'
+
 import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { navigateTo, useHead } from 'nuxt/app'
+import { fetchProposalById } from '../../modules/proposals/services/proposalsService'
 
 const route = useRoute()
 const proposal = ref<Proposal | null>(null)
@@ -135,3 +138,17 @@ watch(id, () => {
   loadProposal()
 })
 </script>
+
+<style scoped>
+.detail-content {
+  max-width: 960px;
+}
+
+.detail-metadata {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+</style>

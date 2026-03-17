@@ -11,24 +11,19 @@
       </slot>
     </v-card-title>
     <v-card-subtitle class="px-0 d-flex align-center gap-2 flex-wrap">
-      <v-chip
-        :color="statusColor"
-        size="small"
-        variant="tonal"
-      >
+      <v-chip :color="statusColor" size="small" variant="tonal">
         {{ statusLabel }}
       </v-chip>
       <span class="text-caption text-medium-emphasis">{{ formattedDate }}</span>
     </v-card-subtitle>
     <v-card-text class="px-0">
       <slot name="description">
-        <span class="text-body2 text-medium-emphasis line-clamp-2">{{ proposal.description }}</span>
+        <span class="text-body2 text-medium-emphasis line-clamp-2">{{
+          proposal.description
+        }}</span>
       </slot>
     </v-card-text>
-    <v-card-actions
-      v-if="$slots.actions"
-      class="px-0 pb-0 pt-2"
-    >
+    <v-card-actions v-if="$slots.actions" class="px-0 pb-0 pt-2">
       <slot name="actions" />
     </v-card-actions>
   </v-card>
@@ -39,53 +34,53 @@ import { computed } from 'vue';
 import type { Proposal, ProposalStatus } from '../../types/proposal'
 
 defineOptions({
-  inheritAttrs: false
-})
+  inheritAttrs: false,
+});
 
 const props = defineProps<{
-  proposal: Proposal
-}>()
+  proposal: Proposal;
+}>();
 
 const emit = defineEmits<{
-  click: [event: MouseEvent]
-}>()
+  click: [event: MouseEvent];
+}>();
 
-function getStatusLabel (status: ProposalStatus): string {
+function getStatusLabel(status: ProposalStatus): string {
   const labels: Record<ProposalStatus, string> = {
-    active: 'Ativo',
-    draft: 'Rascunho',
-    closed: 'Encerrado'
-  }
-  return labels[status] ?? status
+    active: "Ativo",
+    draft: "Rascunho",
+    closed: "Encerrado",
+  };
+  return labels[status] ?? status;
 }
 
-function getStatusColor (status: ProposalStatus): string {
+function getStatusColor(status: ProposalStatus): string {
   const colors: Record<ProposalStatus, string> = {
-    active: 'success',
-    draft: 'warning',
-    closed: 'grey'
-  }
-  return colors[status] ?? 'grey'
+    active: "success",
+    draft: "warning",
+    closed: "grey",
+  };
+  return colors[status] ?? "grey";
 }
 
 const formattedDate = computed(() => {
   try {
-    const d = new Date(props.proposal.createdAt)
-    return d.toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    })
+    const d = new Date(props.proposal.createdAt);
+    return d.toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
   } catch {
-    return props.proposal.createdAt
+    return props.proposal.createdAt;
   }
-})
+});
 
-const statusLabel = computed(() => getStatusLabel(props.proposal.status))
-const statusColor = computed(() => getStatusColor(props.proposal.status))
+const statusLabel = computed(() => getStatusLabel(props.proposal.status));
+const statusColor = computed(() => getStatusColor(props.proposal.status));
 
-function handleClick (event: MouseEvent) {
-  emit('click', event)
+function handleClick(event: MouseEvent) {
+  emit("click", event);
 }
 </script>
 

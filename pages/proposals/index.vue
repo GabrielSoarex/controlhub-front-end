@@ -43,42 +43,42 @@ import { navigateTo, useHead } from "nuxt/app";
 import { onMounted, ref, watch } from "vue";
 
 const proposals = ref<Proposal[]>([]);
-const loading = ref(false);
-const error = ref(false);
-const errorMessage = ref("Não foi possível carregar. Tente novamente.");
-const filterStatus = ref<ProposalStatus | "">("");
-const filterSearch = ref("");
+const loading = ref(false)
+const error = ref(false)
+const errorMessage = ref('Não foi possível carregar. Tente novamente.')
+const filterStatus = ref<ProposalStatus | ''>('')
+const filterSearch = ref('')
 
-useHead({ title: "Propostas" });
+useHead({ title: 'Propostas' })
 
 async function loadProposals() {
   loading.value = true;
   error.value = false;
-  errorMessage.value = "Não foi possível carregar. Tente novamente.";
+  errorMessage.value = 'Não foi possível carregar. Tente novamente.'
   try {
     const res = await fetchProposals({
       status: filterStatus.value || undefined,
       q: filterSearch.value || undefined,
-    });
-    proposals.value = res;
+    })
+    proposals.value = res
   } catch (e: any) {
-    error.value = true;
-    const msg = e?.data?.message || e?.message;
-    if (msg) errorMessage.value = String(msg);
+    error.value = true
+    const msg = e?.data?.message || e?.message
+    if (msg) errorMessage.value = String(msg)
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 }
 
 function onCardClick(proposal: Proposal) {
-  navigateTo(`/proposals/${proposal.id}`);
+  navigateTo(`/proposals/${proposal.id}`)
 }
 
 onMounted(() => {
-  loadProposals();
-});
+  loadProposals()
+})
 
 watch([filterStatus, filterSearch], () => {
-  loadProposals();
-});
+  loadProposals()
+})
 </script>
